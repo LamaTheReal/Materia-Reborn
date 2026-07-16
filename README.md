@@ -68,4 +68,4 @@ Materia Reborn is an independent project. ProjectE provided early inspiration fo
 
 ## License
 
-Copyright © 2026 LamaTheReal. All Rights Reserved. See [LICENSE.md](LICENSE.md).
+Materia Reborn is available under the [MIT License](LICENSE.md).
