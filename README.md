@@ -6,9 +6,9 @@ It is inspired by the freedom and item-transmutation ideas of ProjectE, but it i
 
 > **Status:** Early development — features, balance, visuals, and compatibility may change.
 
-**Official Modrinth page:** [Download and follow Materia Reborn on Modrinth](https://modrinth.com/mod/materia-reborn) (Under review)
+**Official Modrinth page:** [click here](https://modrinth.com/mod/materia-reborn) (Under review)
 
-**Official Curseforge page:** [Download and follow Materia Reborn on Modrinth](https://www.curseforge.com/minecraft/mc-mods/materia-reborn/preview) (Under review)
+**Official Curseforge page:** [click here](https://www.curseforge.com/minecraft/mc-mods/materia-reborn/preview) (Under review)
 
 ![Materia Reborn showcase](assets/screenshots/overview.jpg)
 
