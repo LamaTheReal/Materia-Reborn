@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OCO",
+    "D#D",
+    "OCO"
+  ],
+  "key": {
+    "O": { "item": "minecraft:obsidian" },
+    "C": { "item": "materia_reborn:essence_crystal" },
+    "D": { "item": "materia_reborn:essence_dust" },
+    "#": { "item": "minecraft:diamond" }
+  },
+  "result": {
+    "id": "materia_reborn:essence_core",
+    "count": 1
+  }
+}

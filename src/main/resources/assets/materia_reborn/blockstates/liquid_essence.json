@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "ritual_stabilized=false": { "model": "minecraft:block/water" },
+    "ritual_stabilized=true": { "model": "minecraft:block/water" }
+  }
+}

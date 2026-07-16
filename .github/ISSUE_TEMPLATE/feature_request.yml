@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest an idea for Materia Reborn.
+title: "[Suggestion]: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! Materia Reborn aims for satisfying, balanced survival progression. Tell us how your suggestion fits that direction.
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to add or change?
+      placeholder: Describe the feature or improvement.
+    validations:
+      required: true
+  - type: textarea
+    id: gameplay
+    attributes:
+      label: How would it work in gameplay?
+      description: Explain the player flow, costs, limits, or progression if you have them in mind.
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would this improve Materia Reborn?
+      description: Tell us what problem it solves or what it would make more fun.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Are there other ways to solve the same problem?

@@ -6,7 +6,7 @@ It is inspired by the freedom and item-transmutation ideas of ProjectE, but it i
 
 > **Status:** Early development — features, balance, visuals, and compatibility may change.
 
-![Materia Reborn showcase](assets/screenshots/overview.png)
+![Materia Reborn showcase](assets/screenshots/overview.jpg)
 
 ## What makes it different?
 
@@ -24,11 +24,11 @@ Materia Reborn is not meant to be an instant, overpowered item printer. Players 
 
 | Essence | Backpack | Furnace |
 | --- | --- | --- |
-| ![Essence interface](assets/screenshots/essence-ui.png) | ![Backpack interface](assets/screenshots/backpack-ui.png) | ![Furnace interface](assets/screenshots/furnace-ui.png) |
+| ![Essence interface](assets/screenshots/essence-ui.jpg) | ![Backpack interface](assets/screenshots/backpack-ui.jpg) | ![Furnace interface](assets/screenshots/furnace-ui.jpg) |
 
 | Table upgrade ritual | Ritual in action |
 | --- | --- |
-| ![Ritual layout](assets/screenshots/table-ritual.png) | ![Ritual in action](assets/screenshots/ritual-in-action.png) |
+| ![Ritual layout](assets/screenshots/table-ritual.jpg) | ![Ritual in action](assets/screenshots/ritual-in-action.jpg) |
 
 ## Current features
 

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["ILI", "DED", "IRI"],
+  "key": {
+    "I": { "item": "minecraft:iron_block" },
+    "L": { "item": "minecraft:lapis_block" },
+    "D": { "item": "minecraft:diamond_block" },
+    "R": { "item": "minecraft:redstone_block" },
+    "E": { "item": "materia_reborn:essence_core" }
+  },
+  "result": { "id": "materia_reborn:upgrade_core_3", "count": 1 }
+}

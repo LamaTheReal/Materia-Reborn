@@ -1,0 +1,57 @@
+name: Bug report
+description: Tell us about something in Materia Reborn that is not working as intended.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. Please fill out the details below so it can be reproduced.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Explain what you expected to happen and what happened instead.
+      placeholder: I expected ... but instead ...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the exact steps that reliably cause the issue.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: minecraft-version
+    attributes:
+      label: Minecraft version
+      placeholder: e.g. 1.21.1
+    validations:
+      required: true
+  - type: input
+    id: mod-version
+    attributes:
+      label: Materia Reborn version
+      placeholder: e.g. 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: loader
+    attributes:
+      label: Mod loader and version
+      placeholder: e.g. NeoForge 21.1.x
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, crash report, or screenshots
+      description: Drag files here or paste the relevant log section. Please remove any personal information first.
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Add any other context that may help.

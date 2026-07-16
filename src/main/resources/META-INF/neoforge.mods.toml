@@ -1,0 +1,38 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="materia_reborn"
+version="0.1.0"
+displayName="Materia Reborn"
+authors="LamaTheReal"
+description='''Collect Essence, analyze and unlock items, expand your Backpack and Furnace, and upgrade the Materia Table through powerful rituals.'''
+
+[[dependencies.materia_reborn]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.235,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.materia_reborn]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.materia_reborn]]
+modId="jei"
+type="optional"
+versionRange="[19,)"
+ordering="AFTER"
+side="CLIENT"
+
+[[dependencies.materia_reborn]]
+modId="jeresources"
+type="optional"
+versionRange="[1.6,)"
+ordering="AFTER"
+side="CLIENT"

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["CGC", "BEB", "CMC"],
+  "key": {
+    "C": { "item": "minecraft:copper_block" },
+    "G": { "item": "minecraft:gold_block" },
+    "B": { "item": "minecraft:brick" },
+    "M": { "item": "minecraft:honeycomb_block" },
+    "E": { "item": "materia_reborn:essence_core" }
+  },
+  "result": { "id": "materia_reborn:upgrade_core_2", "count": 1 }
+}

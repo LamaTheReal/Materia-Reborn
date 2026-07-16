@@ -1,0 +1,21 @@
+# Local editors
+.idea/
+.vscode/
+*.iml
+
+# Build and runtime output
+.gradle/
+build/
+out/
+run/
+runs/
+config/
+logs/
+*.log
+*.jar
+
+# Local reference and scratch material
+Not Used/
+Whole project SRC/
+short.txt
+add.txt

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["SPS", "OEO", "PXP"],
+  "key": {
+    "S": { "item": "minecraft:shulker_shell" },
+    "P": { "item": "minecraft:purpur_block" },
+    "O": { "item": "minecraft:crying_obsidian" },
+    "E": { "item": "materia_reborn:essence_core" },
+    "X": { "item": "minecraft:end_crystal" }
+  },
+  "result": { "id": "materia_reborn:upgrade_core_4", "count": 1 }
+}

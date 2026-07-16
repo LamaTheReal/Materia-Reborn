@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "table_level": 2,
+  "description": "Items available for analysis, unlock, sale and purchase at Materia Table level 2. Order controls catalog order.",
+  "categories": [
+    {
+      "id": "stone_tools",
+      "items": [
+        {"id": "minecraft:stone_sword", "tier": "basic", "analysis": 16, "base": 12, "sell": 12, "buy": 14},
+        {"id": "minecraft:stone_shovel", "tier": "basic", "analysis": 16, "base": 12, "sell": 12, "buy": 14},
+        {"id": "minecraft:stone_pickaxe", "tier": "basic", "analysis": 16, "base": 20, "sell": 20, "buy": 23},
+        {"id": "minecraft:stone_axe", "tier": "basic", "analysis": 16, "base": 20, "sell": 20, "buy": 23},
+        {"id": "minecraft:stone_hoe", "tier": "basic", "analysis": 16, "base": 16, "sell": 16, "buy": 19}
+      ]
+    },
+    {
+      "id": "combat_fishing_and_basic_mob_materials",
+      "items": [
+        {"id": "minecraft:arrow", "tier": "basic", "analysis": 64, "base": 7, "sell": 7, "buy": 9},
+        {"id": "minecraft:string", "tier": "basic", "analysis": 64, "base": 8, "sell": 8, "buy": 10},
+        {"id": "minecraft:bow", "tier": "basic", "analysis": 4, "base": 36, "sell": 36, "buy": 42},
+        {"id": "minecraft:fishing_rod", "tier": "basic", "analysis": 4, "base": 28, "sell": 28, "buy": 33}
+      ]
+    },
+    {
+      "id": "raw_ore_materials",
+      "items": [
+        {"id": "minecraft:raw_copper", "tier": "common", "analysis": 32, "base": 128, "sell": 115, "buy": 154},
+        {"id": "minecraft:raw_iron", "tier": "common", "analysis": 32, "base": 256, "sell": 230, "buy": 308},
+        {"id": "minecraft:raw_gold", "tier": "rare", "analysis": 16, "base": 512, "sell": 409, "buy": 666}
+      ]
+    },
+    {
+      "id": "overworld_monster_drops_and_craftables",
+      "items": [
+        {"id": "minecraft:bone", "tier": "common", "analysis": 32, "base": 16, "sell": 14, "buy": 20},
+        {"id": "minecraft:bone_meal", "tier": "basic", "analysis": 64, "base": 5, "sell": 5, "buy": 6},
+        {"id": "minecraft:bone_block", "tier": "common", "analysis": 32, "base": 48, "sell": 43, "buy": 58},
+        {"id": "minecraft:rotten_flesh", "tier": "common", "analysis": 32, "base": 8, "sell": 7, "buy": 10},
+        {"id": "minecraft:spider_eye", "tier": "common", "analysis": 32, "base": 32, "sell": 28, "buy": 39},
+        {"id": "minecraft:fermented_spider_eye", "tier": "common", "analysis": 32, "base": 44, "sell": 39, "buy": 53},
+        {"id": "minecraft:gunpowder", "tier": "common", "analysis": 32, "base": 64, "sell": 57, "buy": 77},
+        {"id": "minecraft:slime_ball", "tier": "common", "analysis": 32, "base": 64, "sell": 57, "buy": 77},
+        {"id": "minecraft:slime_block", "tier": "common", "analysis": 32, "base": 576, "sell": 518, "buy": 692},
+        {"id": "minecraft:phantom_membrane", "tier": "rare", "analysis": 16, "base": 256, "sell": 204, "buy": 333},
+        {"id": "minecraft:ender_pearl", "tier": "rare", "analysis": 16, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:lead", "tier": "common", "analysis": 32, "base": 48, "sell": 43, "buy": 58},
+        {"id": "minecraft:crossbow", "tier": "common", "analysis": 4, "base": 552, "sell": 496, "buy": 663},
+        {"id": "minecraft:prismarine_shard", "tier": "common", "analysis": 32, "base": 64, "sell": 57, "buy": 77},
+        {"id": "minecraft:prismarine_crystals", "tier": "common", "analysis": 32, "base": 128, "sell": 115, "buy": 154},
+        {"id": "minecraft:nautilus_shell", "tier": "rare", "analysis": 8, "base": 512, "sell": 409, "buy": 666},
+        {"id": "minecraft:trident", "tier": "rare", "analysis": 4, "base": 4096, "sell": 3276, "buy": 5325}
+      ]
+    },
+    {
+      "id": "ocean_monument_blocks_and_loot",
+      "items": [
+        {"id": "minecraft:prismarine", "tier": "common", "analysis": 32, "base": 256, "sell": 230, "buy": 308},
+        {"id": "minecraft:prismarine_bricks", "tier": "common", "analysis": 32, "base": 576, "sell": 518, "buy": 692},
+        {"id": "minecraft:dark_prismarine", "tier": "common", "analysis": 32, "base": 520, "sell": 468, "buy": 624},
+        {"id": "minecraft:sea_lantern", "tier": "rare", "analysis": 16, "base": 896, "sell": 716, "buy": 1165},
+        {"id": "minecraft:sponge", "tier": "rare", "analysis": 8, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:wet_sponge", "tier": "rare", "analysis": 8, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:prismarine_slab", "tier": "common", "analysis": 32, "base": 128, "sell": 115, "buy": 154},
+        {"id": "minecraft:prismarine_stairs", "tier": "common", "analysis": 32, "base": 256, "sell": 230, "buy": 308},
+        {"id": "minecraft:prismarine_wall", "tier": "common", "analysis": 32, "base": 256, "sell": 230, "buy": 308},
+        {"id": "minecraft:prismarine_brick_slab", "tier": "common", "analysis": 32, "base": 288, "sell": 259, "buy": 346},
+        {"id": "minecraft:prismarine_brick_stairs", "tier": "common", "analysis": 32, "base": 576, "sell": 518, "buy": 692},
+        {"id": "minecraft:dark_prismarine_slab", "tier": "common", "analysis": 32, "base": 260, "sell": 234, "buy": 312},
+        {"id": "minecraft:dark_prismarine_stairs", "tier": "common", "analysis": 32, "base": 520, "sell": 468, "buy": 624}
+      ]
+    },
+    {
+      "id": "overworld_loot_and_equipment",
+      "items": [
+        {"id": "minecraft:saddle", "tier": "common", "analysis": 8, "base": 512, "sell": 460, "buy": 615},
+        {"id": "minecraft:name_tag", "tier": "common", "analysis": 8, "base": 512, "sell": 460, "buy": 615},
+        {"id": "minecraft:iron_horse_armor", "tier": "rare", "analysis": 8, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:golden_horse_armor", "tier": "rare", "analysis": 8, "base": 2048, "sell": 1638, "buy": 2663},
+        {"id": "minecraft:diamond_horse_armor", "tier": "rare", "analysis": 8, "base": 8192, "sell": 6553, "buy": 10650},
+        {"id": "minecraft:chainmail_helmet", "tier": "rare", "analysis": 3, "base": 1280, "sell": 1024, "buy": 1664},
+        {"id": "minecraft:chainmail_chestplate", "tier": "rare", "analysis": 3, "base": 2048, "sell": 1638, "buy": 2663},
+        {"id": "minecraft:chainmail_leggings", "tier": "rare", "analysis": 3, "base": 1792, "sell": 1433, "buy": 2330},
+        {"id": "minecraft:chainmail_boots", "tier": "rare", "analysis": 3, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:goat_horn", "tier": "rare", "analysis": 4, "base": 512, "sell": 409, "buy": 666}
+      ]
+    },
+    {
+      "id": "all_music_discs",
+      "items": [
+        {"id": "minecraft:music_disc_13", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_cat", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_blocks", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_chirp", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_far", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_mall", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_mellohi", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_stal", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_strad", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_ward", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_11", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_wait", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_pigstep", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_otherside", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_5", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_relic", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_creator", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_creator_music_box", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332},
+        {"id": "minecraft:music_disc_precipice", "tier": "rare", "analysis": 4, "base": 1024, "sell": 819, "buy": 1332}
+      ]
+    },
+    {
+      "id": "cave_and_worldgen_finds",
+      "items": [
+        {"id": "minecraft:cobweb", "tier": "common", "analysis": 32, "base": 64, "sell": 57, "buy": 77},
+        {"id": "minecraft:glow_lichen", "tier": "basic", "analysis": 64, "base": 8, "sell": 8, "buy": 10}
+      ]
+    },
+    {
+      "id": "amethyst",
+      "items": [
+        {"id": "minecraft:amethyst_shard", "tier": "common", "analysis": 32, "base": 128, "sell": 115, "buy": 154},
+        {"id": "minecraft:amethyst_block", "tier": "common", "analysis": 32, "base": 512, "sell": 460, "buy": 615},
+        {"id": "minecraft:small_amethyst_bud", "tier": "common", "analysis": 8, "base": 128, "sell": 115, "buy": 154},
+        {"id": "minecraft:medium_amethyst_bud", "tier": "common", "analysis": 8, "base": 256, "sell": 230, "buy": 308},
+        {"id": "minecraft:large_amethyst_bud", "tier": "common", "analysis": 8, "base": 384, "sell": 345, "buy": 461},
+        {"id": "minecraft:amethyst_cluster", "tier": "rare", "analysis": 8, "base": 512, "sell": 409, "buy": 666}
+      ]
+    },
+    {
+      "id": "ice_blocks",
+      "items": [
+        {"id": "minecraft:ice", "tier": "common", "analysis": 32, "base": 16, "sell": 14, "buy": 20},
+        {"id": "minecraft:packed_ice", "tier": "common", "analysis": 32, "base": 144, "sell": 129, "buy": 173},
+        {"id": "minecraft:blue_ice", "tier": "rare", "analysis": 16, "base": 1296, "sell": 1036, "buy": 1685}
+      ]
+    },
+    {
+      "id": "explosives_and_fireworks",
+      "items": [
+        {"id": "minecraft:tnt", "tier": "common", "analysis": 16, "base": 336, "sell": 302, "buy": 404},
+        {"id": "minecraft:firework_rocket", "tier": "common", "analysis": 32, "base": 22, "sell": 19, "buy": 27},
+        {"id": "minecraft:firework_star", "tier": "common", "analysis": 32, "base": 68, "sell": 61, "buy": 82}
+      ]
+    },
+    {
+      "id": "natural_and_decorative_utility",
+      "items": [
+        {"id": "minecraft:turtle_egg", "tier": "rare", "analysis": 8, "base": 512, "sell": 409, "buy": 666},
+        {"id": "minecraft:carved_pumpkin", "tier": "basic", "analysis": 64, "base": 16, "sell": 16, "buy": 19},
+        {"id": "minecraft:jack_o_lantern", "tier": "basic", "analysis": 32, "base": 25, "sell": 25, "buy": 29}
+      ]
+    },
+    {
+      "id": "tools_buckets_and_utility",
+      "items": [
+        {"id": "minecraft:shears", "tier": "common", "analysis": 4, "base": 512, "sell": 460, "buy": 615},
+        {"id": "minecraft:shield", "tier": "common", "analysis": 4, "base": 304, "sell": 273, "buy": 365},
+        {"id": "minecraft:flint_and_steel", "tier": "common", "analysis": 4, "base": 272, "sell": 244, "buy": 327},
+        {"id": "minecraft:bucket", "tier": "common", "analysis": 8, "base": 768, "sell": 691, "buy": 922},
+        {"id": "minecraft:water_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
+        {"id": "minecraft:lava_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
+        {"id": "minecraft:milk_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
+        {"id": "minecraft:powder_snow_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
+        {"id": "minecraft:stonecutter", "tier": "common", "analysis": 16, "base": 268, "sell": 241, "buy": 322}
+      ]
+    },
+    {
+      "id": "materia_reborn_materials",
+      "items": [
+        {"id": "materia_reborn:essence_crystal", "tier": "rare", "analysis": 24, "base": 800, "sell": 800, "buy": 6552}
+      ]
+    }
+  ]
+}

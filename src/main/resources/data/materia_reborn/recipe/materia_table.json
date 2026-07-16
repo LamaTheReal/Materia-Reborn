@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "HCH",
+    "PAP"
+  ],
+  "key": {
+    "P": { "item": "materia_reborn:essence_plate" },
+    "S": { "item": "minecraft:spore_blossom" },
+    "H": { "item": "minecraft:heart_of_the_sea" },
+    "C": { "item": "materia_reborn:essence_core" },
+    "A": { "item": "minecraft:amethyst_block" }
+  },
+  "result": {
+    "id": "materia_reborn:materia_table",
+    "count": 1
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IDI",
+    "CGC",
+    "IDI"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_ingot" },
+    "D": { "item": "materia_reborn:essence_dust" },
+    "C": { "item": "minecraft:copper_ingot" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "result": {
+    "id": "materia_reborn:essence_plate",
+    "count": 2
+  }
+}

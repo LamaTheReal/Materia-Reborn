@@ -1,0 +1,9 @@
+{
+  "parent": "materia_reborn:block/materia_table",
+  "textures": {
+    "top": "materia_reborn:block/materia_table_4/top",
+    "side": "materia_reborn:block/materia_table_4/side",
+    "bottom": "materia_reborn:block/materia_table_4/bottom",
+    "particle": "materia_reborn:block/materia_table_4/side"
+  }
+}
