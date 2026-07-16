@@ -1,57 +1,83 @@
 name: Bug report
-description: Tell us about something in Materia Reborn that is not working as intended.
-title: "[Bug]: "
-labels: [bug]
+description: Report a reproducible problem with Materia Reborn.
+title: "[Bug] "
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a problem. Please fill out the details below so it can be reproduced.
-  - type: textarea
-    id: summary
-    attributes:
-      label: What happened?
-      description: Explain what you expected to happen and what happened instead.
-      placeholder: I expected ... but instead ...
-    validations:
-      required: true
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to reproduce
-      description: List the exact steps that reliably cause the issue.
-      placeholder: |
-        1. ...
-        2. ...
-        3. ...
-    validations:
-      required: true
+        Thank you for helping improve Materia Reborn. Please provide enough detail for the problem to be reproduced.
+
   - type: input
-    id: minecraft-version
+    id: minecraft_version
     attributes:
       label: Minecraft version
-      placeholder: e.g. 1.21.1
+      placeholder: "Example: 1.21.1"
     validations:
       required: true
+
   - type: input
-    id: mod-version
+    id: neoforge_version
+    attributes:
+      label: NeoForge version
+      placeholder: "Example: 21.1.235"
+    validations:
+      required: true
+
+  - type: input
+    id: mod_version
     attributes:
       label: Materia Reborn version
-      placeholder: e.g. 0.1.0
+      placeholder: "Example: 0.1.0"
     validations:
       required: true
-  - type: input
-    id: loader
+
+  - type: textarea
+    id: problem
     attributes:
-      label: Mod loader and version
-      placeholder: e.g. NeoForge 21.1.x
+      label: What happened?
+      description: Describe the problem clearly.
+      placeholder: Tell us what went wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      placeholder: Describe the expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: List the smallest set of steps that causes the problem.
+      placeholder: |
+        1. Place or open ...
+        2. Insert or select ...
+        3. Observe ...
+    validations:
+      required: true
+
   - type: textarea
     id: logs
     attributes:
-      label: Logs, crash report, or screenshots
-      description: Drag files here or paste the relevant log section. Please remove any personal information first.
+      label: Logs, crash reports, or screenshots
+      description: Drag files here or paste the relevant log section. Remove personal information first.
+
   - type: textarea
-    id: extra
+    id: additional_context
     attributes:
-      label: Anything else?
-      description: Add any other context that may help.
+      label: Additional context
+      description: Include installed mods or anything else that may be relevant.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and did not find the same problem.
+          required: true
+        - label: I am using a supported Minecraft and NeoForge version.
+          required: true
