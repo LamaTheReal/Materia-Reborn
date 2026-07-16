@@ -1,33 +1,69 @@
 name: Feature request
-description: Suggest an idea for Materia Reborn.
-title: "[Suggestion]: "
-labels: [enhancement]
+description: Suggest a new feature or improvement for Materia Reborn.
+title: "[Suggestion] "
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for the idea! Materia Reborn aims for satisfying, balanced survival progression. Tell us how your suggestion fits that direction.
+        Thank you for sharing an idea. Materia Reborn aims for balanced, progression-focused survival gameplay.
+
   - type: textarea
-    id: idea
+    id: suggestion
     attributes:
       label: What would you like to add or change?
-      placeholder: Describe the feature or improvement.
+      placeholder: Describe the feature or improvement clearly.
     validations:
       required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why would this improve Materia Reborn?
+      description: Explain the problem it solves or what it would make more enjoyable.
+    validations:
+      required: true
+
   - type: textarea
     id: gameplay
     attributes:
-      label: How would it work in gameplay?
-      description: Explain the player flow, costs, limits, or progression if you have them in mind.
-  - type: textarea
-    id: why
+      label: How should it work in gameplay?
+      description: Describe progression, costs, limits, interactions, or balance considerations.
+      placeholder: Explain how a player would unlock and use the feature.
+
+  - type: dropdown
+    id: area
     attributes:
-      label: Why would this improve Materia Reborn?
-      description: Tell us what problem it solves or what it would make more fun.
+      label: Which area does this affect?
+      options:
+        - Essence and transmutation
+        - Materia Table and rituals
+        - Backpack
+        - Furnace
+        - World generation and materials
+        - User interface
+        - Configuration and compatibility
+        - Other
     validations:
       required: true
+
   - type: textarea
     id: alternatives
     attributes:
       label: Alternatives considered
-      description: Are there other ways to solve the same problem?
+      description: Describe any other solutions or implementations you considered.
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add sketches, screenshots, examples, or other useful information.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and did not find the same suggestion.
+          required: true
+        - label: This suggestion fits Materia Reborn's progression-focused direction.
+          required: true
