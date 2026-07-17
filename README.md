@@ -8,7 +8,7 @@ It is inspired by the freedom and item-transmutation ideas of ProjectE, but it i
 
 **Official Modrinth page:** [click here](https://modrinth.com/mod/materia-reborn) (Under review)
 
-**Official Curseforge page:** [click here](https://www.curseforge.com/minecraft/mc-mods/materia-reborn/preview) (Under review)
+**Official Curseforge page:** [click here](https://www.curseforge.com/minecraft/mc-mods/materia-reborn/preview)
 
 ![Materia Reborn showcase](assets/screenshots/overview.jpg)
 
