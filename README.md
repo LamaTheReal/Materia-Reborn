@@ -10,6 +10,9 @@ It is inspired by the freedom and item-transmutation ideas of ProjectE, but it i
 
 **Official Curseforge page:** [click here](https://www.curseforge.com/minecraft/mc-mods/materia-reborn/preview)
 
+**You can also join our Discord :3 :** [click here](https://discord.gg/4YmYJc8JTb)
+
+
 ![Materia Reborn showcase](assets/screenshots/overview.jpg)
 
 ## What makes it different?
