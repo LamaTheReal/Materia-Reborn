@@ -10,6 +10,7 @@ public final class PlayerEssenceKnowledge {
     private static final String UNLOCKED_TAG = "Unlocked";
     private static final String SELECTED_ITEM_TAG = "SelectedItem";
     private static final String AUTO_SELL_TAG = "AutoSell";
+    private static final String AUTO_REFILL_TAG = "AutoRefill";
 
     private PlayerEssenceKnowledge() {
     }
@@ -50,6 +51,17 @@ public final class PlayerEssenceKnowledge {
         CompoundTag knowledge = knowledge(player);
         boolean enabled = !knowledge.getBoolean(AUTO_SELL_TAG);
         knowledge.putBoolean(AUTO_SELL_TAG, enabled);
+        return enabled;
+    }
+
+    public static boolean autoRefillEnabled(Player player) {
+        return knowledge(player).getBoolean(AUTO_REFILL_TAG);
+    }
+
+    public static boolean toggleAutoRefill(Player player) {
+        CompoundTag knowledge = knowledge(player);
+        boolean enabled = !knowledge.getBoolean(AUTO_REFILL_TAG);
+        knowledge.putBoolean(AUTO_REFILL_TAG, enabled);
         return enabled;
     }
 
@@ -104,6 +116,28 @@ public final class PlayerEssenceKnowledge {
         knowledge.putString(SELECTED_ITEM_TAG, EssenceItemCatalog.get(catalogIndex).catalogId());
     }
 
+    public static void grantUnlock(Player player, EssenceItemDefinition definition) {
+        CompoundTag knowledge = knowledge(player);
+        CompoundTag analysis = knowledge.getCompound(ANALYSIS_TAG);
+        CompoundTag unlocked = knowledge.getCompound(UNLOCKED_TAG);
+        analysis.putInt(definition.catalogId(), definition.requiredAnalysis());
+        unlocked.putBoolean(definition.catalogId(), true);
+        knowledge.put(ANALYSIS_TAG, analysis);
+        knowledge.put(UNLOCKED_TAG, unlocked);
+    }
+
+    public static void lockAndResetAnalysis(Player player, EssenceItemDefinition definition) {
+        CompoundTag knowledge = knowledge(player);
+        CompoundTag analysis = knowledge.getCompound(ANALYSIS_TAG);
+        CompoundTag unlocked = knowledge.getCompound(UNLOCKED_TAG);
+        analysis.remove(definition.catalogId());
+        unlocked.remove(definition.catalogId());
+        knowledge.put(ANALYSIS_TAG, analysis);
+        knowledge.put(UNLOCKED_TAG, unlocked);
+        if (definition.catalogId().equals(knowledge.getString(SELECTED_ITEM_TAG))) {
+            knowledge.remove(SELECTED_ITEM_TAG);
+        }
+    }
     public static void unlockAll(Player player) {
         CompoundTag knowledge = knowledge(player);
         CompoundTag analysis = knowledge.getCompound(ANALYSIS_TAG);

@@ -107,6 +107,9 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
     private static final int ESSENCE_CATALOG_ROWS = 6;
     private static final int ESSENCE_CATALOG_SPACING = 24;
     private static final int ESSENCE_CATALOG_PAGE_SIZE = ESSENCE_CATALOG_COLUMNS * ESSENCE_CATALOG_ROWS;
+    private static final int ESSENCE_CATALOG_QUICK_SLOT_COUNT = 2;
+    private static final int ESSENCE_CATALOG_REGULAR_PAGE_SIZE =
+            ESSENCE_CATALOG_PAGE_SIZE - ESSENCE_CATALOG_QUICK_SLOT_COUNT;
     private static final int ESSENCE_CATALOG_PAGE_Y = 264;
     private static final int ESSENCE_CATALOG_PREVIOUS_X = 268;
     private static final int ESSENCE_CATALOG_NEXT_X = 390;
@@ -114,6 +117,10 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
     private static final int ESSENCE_CATALOG_PAGE_BUTTON_HEIGHT = 14;
     private static final int ESSENCE_CATALOG_GRID_WIDTH = 140;
     private static final int ESSENCE_SEARCH_WIDTH = 94;
+    private static final int CRAFTING_AUTO_FILL_X = 196;
+    private static final int CRAFTING_AUTO_FILL_Y = 187;
+    private static final int CRAFTING_AUTO_FILL_WIDTH = 52;
+    private static final int CRAFTING_AUTO_FILL_HEIGHT = 16;
     private static final int ESSENCE_FILTER_BUTTON_X = 366;
     private static final int ESSENCE_FILTER_BUTTON_Y = 98;
     private static final int ESSENCE_FILTER_BUTTON_WIDTH = 42;
@@ -217,7 +224,7 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
             return;
         }
         int index = essenceCatalogIndexAt(mouseX, mouseY);
-        if (index >= 0 && menu.isEssenceItemUnlocked(index)) {
+        if (index >= 0 && menu.isEssenceItemAvailable(index)) {
             graphics.renderTooltip(font, menu.essenceCatalogStack(index), mouseX, mouseY);
         }
     }
@@ -456,6 +463,17 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
                 }
                 if (isInside(mouseX, mouseY, leftPos + 22, topPos + 281, 98, 20)) {
                     sendMenuButton(MateriaTableMenu.autoSellButtonId());
+                    return true;
+                }
+                if (isInside(
+                        mouseX,
+                        mouseY,
+                        leftPos + CRAFTING_AUTO_FILL_X,
+                        topPos + CRAFTING_AUTO_FILL_Y,
+                        CRAFTING_AUTO_FILL_WIDTH,
+                        CRAFTING_AUTO_FILL_HEIGHT
+                )) {
+                    sendMenuButton(MateriaTableMenu.autoRefillButtonId());
                     return true;
                 }
                 if (menu.canRemoveEssenceUnlock(inspectedEssenceCatalogIndex)
@@ -796,10 +814,14 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
             int offsetX = Mth.floor(time * (5.0F + layer * 2.5F)) % spacing;
             int offsetY = Mth.floor(time * (3.0F + layer * 1.5F)) % spacing;
             for (int x = -spacing + offsetX; x < imageWidth; x += spacing) {
-                graphics.fill(x, 2, x + 1, imageHeight - 2, color);
+                if (x >= 2 && x < imageWidth - 2) {
+                    graphics.fill(x, 2, x + 1, imageHeight - 2, color);
+                }
             }
             for (int y = -spacing + offsetY; y < imageHeight; y += spacing) {
-                graphics.fill(2, y, imageWidth - 2, y + 1, color);
+                if (y >= 2 && y < imageHeight - 2) {
+                    graphics.fill(2, y, imageWidth - 2, y + 1, color);
+                }
             }
         }
 
@@ -1166,9 +1188,22 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
             inspectedEssenceCatalogIndex = -1;
         }
 
-        ItemStack displayedStack = inspectedEssenceCatalogIndex >= 0
-                ? menu.essenceCatalogStack(inspectedEssenceCatalogIndex)
-                : analyzeSlot.getItem();
+        int previewIndex;
+        if (hoveredUnlocked) {
+            previewIndex = hoveredCatalogIndex;
+        } else if (carriedCatalogIndex >= 0) {
+            previewIndex = carriedCatalogIndex;
+        } else if (inputIndex >= 0) {
+            previewIndex = inputIndex;
+        } else {
+            previewIndex = inspectedEssenceCatalogIndex;
+        }
+        boolean showingCatalogInfo = previewIndex >= 0
+                && previewIndex == inspectedEssenceCatalogIndex
+                && menu.canRemoveEssenceUnlock(previewIndex);
+        ItemStack displayedStack = previewIndex >= 0
+                ? menu.essenceCatalogStack(previewIndex)
+                : ItemStack.EMPTY;
         if (!displayedStack.isEmpty()) {
             graphics.pose().pushPose();
             graphics.pose().translate(55, 90, 0.0F);
@@ -1182,6 +1217,13 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
         if (inspectedEssenceCatalogIndex >= 0) {
             statusValue = Component.translatable("screen.materia_reborn.materia_table.status.unlocked");
             statusColor = POSITIVE;
+        } else if (previewIndex >= 0
+                && menu.essenceItemRequiredTableLevel(previewIndex) > menu.tableTier()) {
+            statusValue = Component.translatable(
+                    "screen.materia_reborn.materia_table.status.requires_level",
+                    menu.essenceItemRequiredTableLevel(previewIndex)
+            );
+            statusColor = DANGER;
         } else if (inputIndex < 0) {
             boolean analyzedSelection = menu.canUnlockEssenceItem();
             statusValue = Component.translatable(analyzedSelection
@@ -1279,8 +1321,7 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
                 84,
                 TEXT_PRIMARY
         );
-        boolean showingCatalogInfo = inspectedEssenceCatalogIndex >= 0;
-        int infoIndex = showingCatalogInfo ? inspectedEssenceCatalogIndex : inputIndex;
+        int infoIndex = previewIndex;
         if (infoIndex >= 0) {
             int sellValueY = showingCatalogInfo ? 107 : 98;
             int purchaseCostY = showingCatalogInfo ? 122 : 113;
@@ -1305,7 +1346,25 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
             drawEssenceAmount(graphics, 210, sellValueY, sellValue, WARNING);
             drawEssenceAmount(graphics, 210, purchaseCostY, purchaseCost, ESSENCE_BLUE);
 
-            if (showingCatalogInfo) {
+            int requiredTableLevel = menu.essenceItemRequiredTableLevel(infoIndex);
+            if (requiredTableLevel > menu.tableTier()) {
+                Component tableRequirement = Component.translatable(
+                        "screen.materia_reborn.materia_table.requires_level",
+                        requiredTableLevel
+                );
+                List<net.minecraft.util.FormattedCharSequence> requirementLines = font.split(tableRequirement, 108);
+                for (int lineIndex = 0; lineIndex < requirementLines.size(); lineIndex++) {
+                    net.minecraft.util.FormattedCharSequence line = requirementLines.get(lineIndex);
+                    graphics.drawString(
+                            font,
+                            line,
+                            194 - font.width(line) / 2,
+                            133 + lineIndex * 10,
+                            DANGER,
+                            false
+                    );
+                }
+            } else if (showingCatalogInfo) {
                 boolean removeHovered = isInside(
                         mouseX,
                         mouseY,
@@ -1334,21 +1393,40 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
                         false
                 );
                 Component requirement = Component.literal(
-                        menu.essenceAnalysisProgress(inputIndex)
+                        menu.essenceAnalysisProgress(infoIndex)
                                 + " / "
-                                + menu.essenceAnalysisRequired(inputIndex)
+                                + menu.essenceAnalysisRequired(infoIndex)
                                 + " "
-                ).append(menu.essenceCatalogStack(inputIndex).getHoverName());
+                ).append(menu.essenceCatalogStack(infoIndex).getHoverName());
                 graphics.drawCenteredString(font, requirement, 194, 146, ESSENCE_BLUE);
             }
         }
 
-        graphics.drawCenteredString(
+        graphics.drawString(
                 font,
                 Component.translatable("screen.materia_reborn.materia_table.crafting"),
-                194,
+                140,
                 190,
-                TEXT_PRIMARY
+                TEXT_PRIMARY,
+                false
+        );
+        boolean autoFillHovered = isInside(
+                mouseX,
+                mouseY,
+                leftPos + CRAFTING_AUTO_FILL_X,
+                topPos + CRAFTING_AUTO_FILL_Y,
+                CRAFTING_AUTO_FILL_WIDTH,
+                CRAFTING_AUTO_FILL_HEIGHT
+        );
+        drawActionButton(
+                graphics,
+                CRAFTING_AUTO_FILL_X,
+                CRAFTING_AUTO_FILL_Y,
+                CRAFTING_AUTO_FILL_WIDTH,
+                CRAFTING_AUTO_FILL_HEIGHT,
+                Component.translatable("screen.materia_reborn.materia_table.auto_fill"),
+                autoFillHovered || menu.isAutoRefillEnabled(),
+                false
         );
         drawCraftingPlaceholder(graphics, 146, 206);
 
@@ -1413,7 +1491,7 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
                 ItemStack stack = menu.essenceCatalogStack(catalogIndex);
                 graphics.renderFakeItem(stack, x, y);
                 graphics.renderItemDecorations(font, stack, x, y);
-            } else {
+            } else if (visualSlot >= ESSENCE_CATALOG_QUICK_SLOT_COUNT) {
                 drawLockIcon(graphics, x + 5, y + 4, 0xFF352F3C);
             }
         }
@@ -1440,8 +1518,16 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
     }
 
     private int essenceCatalogIndexForVisualSlot(int visualSlot, List<Integer> matches) {
-        int position = essenceCatalogPage * ESSENCE_CATALOG_PAGE_SIZE + visualSlot;
-        return position >= 0 && position < matches.size() ? matches.get(position) : -1;
+        if (visualSlot == 0) {
+            return menu.recentSoldEssenceItemIndex();
+        }
+        if (visualSlot == 1) {
+            return menu.recentPurchasedEssenceItemIndex();
+        }
+
+        int regularSlot = visualSlot - ESSENCE_CATALOG_QUICK_SLOT_COUNT;
+        int position = essenceCatalogPage * ESSENCE_CATALOG_REGULAR_PAGE_SIZE + regularSlot;
+        return regularSlot >= 0 && position < matches.size() ? matches.get(position) : -1;
     }
 
     private void drawEssenceFilterDropdown(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -1595,15 +1681,21 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
     private List<Integer> matchingEssenceCatalogIndices() {
         String query = essenceSearch.strip().toLowerCase(Locale.ROOT);
         List<Integer> matches = new ArrayList<>();
+        int recentSoldIndex = menu.recentSoldEssenceItemIndex();
+        int recentPurchasedIndex = menu.recentPurchasedEssenceItemIndex();
         if (activeEssenceFilter == null) {
             for (int catalogIndex = 0; catalogIndex < menu.essenceCatalogSize(); catalogIndex++) {
-                if (matchesEssenceCatalogEntry(catalogIndex, query)) {
+                if (catalogIndex != recentSoldIndex
+                        && catalogIndex != recentPurchasedIndex
+                        && matchesEssenceCatalogEntry(catalogIndex, query)) {
                     matches.add(catalogIndex);
                 }
             }
         } else {
             for (int catalogIndex : essenceCatalogIndicesForFilter(activeEssenceFilter)) {
-                if (matchesEssenceCatalogEntry(catalogIndex, query)) {
+                if (catalogIndex != recentSoldIndex
+                        && catalogIndex != recentPurchasedIndex
+                        && matchesEssenceCatalogEntry(catalogIndex, query)) {
                     matches.add(catalogIndex);
                 }
             }
@@ -1628,7 +1720,8 @@ public final class MateriaTableScreen extends AbstractContainerScreen<MateriaTab
     }
 
     private int essenceCatalogPageCount(int matchCount) {
-        return Math.max(1, (matchCount + ESSENCE_CATALOG_PAGE_SIZE - 1) / ESSENCE_CATALOG_PAGE_SIZE);
+        return Math.max(1, (matchCount + ESSENCE_CATALOG_REGULAR_PAGE_SIZE - 1)
+                / ESSENCE_CATALOG_REGULAR_PAGE_SIZE);
     }
 
     private void clampEssenceCatalogPage(int matchCount) {

@@ -9,9 +9,11 @@ import com.materiareborn.core.MateriaRuntime;
 import com.materiareborn.event.EssenceCondensationEvents;
 import com.materiareborn.event.EssenceCrystalActivationEvents;
 import com.materiareborn.event.MateriaItemTooltipEvents;
+import com.materiareborn.event.MateriaSessionEvents;
 import com.materiareborn.event.MateriaSoulboundEvents;
 import com.materiareborn.event.MateriaTableRitualEvents;
 import com.materiareborn.event.LiquidEssenceBrewingEvents;
+import com.materiareborn.network.MateriaPayloads;
 import com.materiareborn.ritual.MateriaTableRitualBuildProcess;
 import com.materiareborn.core.ModConstants;
 import com.materiareborn.registry.ModRegistries;
@@ -39,8 +41,10 @@ public final class MateriaReborn {
             MateriaClient.registerConfigScreen(modContainer);
         }
         ModRegistries.register(modEventBus);
+        modEventBus.addListener(MateriaPayloads::register);
         NeoForge.EVENT_BUS.addListener(MateriaCommands::register);
         NeoForge.EVENT_BUS.addListener(EssenceCrystalActivationEvents::onRightClickItem);
+        NeoForge.EVENT_BUS.addListener(EssenceCrystalActivationEvents::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(EssenceCondensationEvents::onRightClickBlock);
         NeoForge.EVENT_BUS.addListener(EssenceCondensationEvents::onLevelTick);
         NeoForge.EVENT_BUS.addListener(MateriaTableRitualEvents::onRightClickBlock);
@@ -50,6 +54,8 @@ public final class MateriaReborn {
         NeoForge.EVENT_BUS.addListener(MateriaSoulboundEvents::onLivingDrops);
         NeoForge.EVENT_BUS.addListener(MateriaSoulboundEvents::onPlayerClone);
         NeoForge.EVENT_BUS.addListener(MateriaItemTooltipEvents::onItemTooltip);
+        NeoForge.EVENT_BUS.addListener(MateriaSessionEvents::onPlayerLoggedIn);
+        NeoForge.EVENT_BUS.addListener(MateriaSessionEvents::onPlayerLoggedOut);
         this.runtime = MateriaRuntime.bootstrap();
 
         modEventBus.addListener(this::onCommonSetup);

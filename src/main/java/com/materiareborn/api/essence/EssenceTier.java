@@ -3,11 +3,11 @@ package com.materiareborn.api.essence;
 import java.math.BigDecimal;
 
 public enum EssenceTier {
-    BASIC("basic", "1.0", "1.0"),
-    COMMON("common", "0.9", "1.0"),
-    RARE("rare", "0.8", "1.2"),
-    ARCANE("arcane", "0.5", "1.5"),
-    MYTHIC("mythic", "0.5", "3.0");
+    BASIC("basic", "1.0", "1.15"),
+    COMMON("common", "0.9", "1.2"),
+    RARE("rare", "0.8", "1.3"),
+    ARCANE("arcane", "0.6", "1.5"),
+    MYTHIC("mythic", "0.5", "2.0");
 
     private final String id;
     private final BigDecimal sellMultiplier;
@@ -21,6 +21,14 @@ public enum EssenceTier {
 
     public String id() {
         return id;
+    }
+
+    public BigDecimal sellMultiplier() {
+        return sellMultiplier;
+    }
+
+    public BigDecimal purchaseMultiplier() {
+        return purchaseMultiplier;
     }
 
     public EssenceAmount sellValue(EssenceAmount baseValue) {

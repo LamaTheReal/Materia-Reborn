@@ -47,7 +47,10 @@ final class EssenceItemCatalogLoader {
             JsonArray items = requiredArray(category, "items", resourcePath);
             for (JsonElement itemElement : items) {
                 JsonObject itemData = requiredObject(itemElement, resourcePath, "item");
-                if (itemData.has("enabled") && !itemData.get("enabled").getAsBoolean()) {
+                if (itemData.has("enabled") && !itemData.get("enabled").getAsBoolean()
+                        || requiredLong(itemData, "base", resourcePath) <= 0L
+                        || requiredLong(itemData, "sell", resourcePath) <= 0L
+                        || requiredLong(itemData, "buy", resourcePath) <= 0L) {
                     continue;
                 }
                 EssenceItemDefinition definition = parseDefinition(

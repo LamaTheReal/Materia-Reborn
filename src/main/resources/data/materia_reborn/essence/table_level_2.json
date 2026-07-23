@@ -159,7 +159,7 @@
         {"id": "minecraft:flint_and_steel", "tier": "common", "analysis": 4, "base": 272, "sell": 244, "buy": 327},
         {"id": "minecraft:bucket", "tier": "common", "analysis": 8, "base": 768, "sell": 691, "buy": 922},
         {"id": "minecraft:water_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
-        {"id": "minecraft:lava_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
+        {"id": "minecraft:lava_bucket", "tier": "common", "analysis": 4, "base": 894, "sell": 817, "buy": 1048},
         {"id": "minecraft:milk_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
         {"id": "minecraft:powder_snow_bucket", "tier": "common", "analysis": 4, "base": 768, "sell": 691, "buy": 922},
         {"id": "minecraft:stonecutter", "tier": "common", "analysis": 16, "base": 268, "sell": 241, "buy": 322}

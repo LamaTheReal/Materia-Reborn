@@ -1,14 +1,20 @@
 package com.materiareborn.menu;
 
+import java.util.List;
 import java.util.Optional;
 import com.materiareborn.api.essence.EssenceAmount;
 import com.materiareborn.block.MateriaTableBlock;
 import com.materiareborn.blockentity.MateriaTableBlockEntity;
 import com.materiareborn.config.MateriaConfig;
+import com.materiareborn.crafting.AutoRefillPlan;
+import com.materiareborn.crafting.AutoRefillPlanner;
+import com.materiareborn.directcraft.DirectCraftPlan;
+import com.materiareborn.directcraft.DirectCraftPlanner;
 import com.materiareborn.essence.EssenceItemCatalog;
 import com.materiareborn.essence.EssenceItemDefinition;
 import com.materiareborn.essence.PlayerEssence;
 import com.materiareborn.essence.PlayerEssenceKnowledge;
+import com.materiareborn.essence.PlayerEssenceSessionHistory;
 import com.materiareborn.progression.BackpackExtraUpgrade;
 import com.materiareborn.progression.FurnaceExtraUpgrade;
 import com.materiareborn.progression.MateriaTableProgression;
@@ -17,6 +23,7 @@ import com.materiareborn.registry.ModMenuTypes;
 import com.materiareborn.ritual.MateriaTableRitualBuilder;
 import com.materiareborn.ritual.MateriaTableUpgrade;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -74,6 +81,7 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
     private static final int UNLOCK_ITEM_BUTTON_ID = 2901;
     private static final int SELL_ITEM_BUTTON_ID = 2902;
     private static final int AUTO_SELL_BUTTON_ID = 2903;
+    private static final int AUTO_REFILL_BUTTON_ID = 2904;
     private static final int ESSENCE_ITEM_PURCHASE_BUTTON_START_ID = 3000;
     private static final int ESSENCE_ITEM_PURCHASE_BUTTON_STRIDE = 4;
     private static final int ESSENCE_ITEM_REMOVE_UNLOCK_BUTTON_START_ID = 100_000;
@@ -146,9 +154,12 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
     private boolean syncedBackpackFilterIgnoreNbt;
     private boolean syncedBackpackFilterIgnoreDamage;
     private boolean syncedAutoSellEnabled;
+    private boolean syncedAutoRefillEnabled;
     private long displayedEssence;
     private int selectedEssenceItemIndex = -1;
     private int syncedSelectedEssenceAnalysis;
+    private int syncedRecentSoldEssenceItemIndex = -1;
+    private int syncedRecentPurchasedEssenceItemIndex = -1;
     private final int[] syncedEssenceUnlockWords = new int[ESSENCE_UNLOCK_WORD_COUNT];
     private int syncedUnlockedStorageSlots = MateriaConfig.initialBackpackSlots();
     private int syncedUnlockedFurnaceSlotsPerSide = MateriaConfig.initialFurnaceSlotsPerSide();
@@ -259,8 +270,11 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         addDataSlot(createEssenceLowDataSlot());
         addDataSlot(createEssenceHighDataSlot());
         addDataSlot(createAutoSellDataSlot());
+        addDataSlot(createAutoRefillDataSlot());
         addDataSlot(createSelectedEssenceItemDataSlot());
         addDataSlot(createSelectedEssenceAnalysisDataSlot());
+        addDataSlot(createRecentSoldEssenceItemDataSlot());
+        addDataSlot(createRecentPurchasedEssenceItemDataSlot());
         for (int wordIndex = 0; wordIndex < ESSENCE_UNLOCK_WORD_COUNT; wordIndex++) {
             addDataSlot(createEssenceUnlockWordDataSlot(wordIndex));
         }
@@ -374,6 +388,7 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
             case UNLOCK_ITEM_BUTTON_ID -> unlockEssenceItem(player);
             case SELL_ITEM_BUTTON_ID -> sellEssenceItem(player);
             case AUTO_SELL_BUTTON_ID -> toggleAutoSell(player);
+            case AUTO_REFILL_BUTTON_ID -> toggleAutoRefill(player);
             case SMELT_ESSENCE_BUTTON_ID -> toggleSmeltEssence();
             case UPGRADE_BUTTON_ID -> tryUpgrade(player, 1);
             case UPGRADE_TEN_BUTTON_ID -> tryUpgrade(player, 10);
@@ -472,6 +487,7 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         long earned = safeMultiply(definition.sellValue(), input.getCount());
         inputSlot.setByPlayer(ItemStack.EMPTY);
         PlayerEssence.add(player, earned);
+        PlayerEssenceSessionHistory.recordSold(player, index);
         displayedEssence = PlayerEssence.get(player);
     }
     @Override
@@ -848,6 +864,9 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         return player.level().isClientSide ? displayedEssence : PlayerEssence.get(player);
     }
 
+    public long displayedEssenceValue() {
+        return currentEssence();
+    }
     public String formattedDisplayedEssence() {
         return displayedEssence().toString();
     }
@@ -868,14 +887,27 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
                 : ItemStack.EMPTY;
     }
 
+    public int recentSoldEssenceItemIndex() {
+        int index = player.level().isClientSide
+                ? syncedRecentSoldEssenceItemIndex
+                : PlayerEssenceSessionHistory.lastSoldIndex(player);
+        return isEssenceItemAvailable(index) ? index : -1;
+    }
+
+    public int recentPurchasedEssenceItemIndex() {
+        int index = player.level().isClientSide
+                ? syncedRecentPurchasedEssenceItemIndex
+                : PlayerEssenceSessionHistory.lastPurchasedIndex(player);
+        return isEssenceItemAvailable(index) ? index : -1;
+    }
     public long essenceItemSellValue(int index) {
-        return isEssenceItemAvailable(index)
+        return index >= 0 && index < EssenceItemCatalog.size()
                 ? EssenceItemCatalog.get(index).sellValue()
                 : 0L;
     }
 
     public long essenceItemPurchaseCost(int index) {
-        return isEssenceItemAvailable(index)
+        return index >= 0 && index < EssenceItemCatalog.size()
                 ? EssenceItemCatalog.get(index).purchaseCost()
                 : 0L;
     }
@@ -922,14 +954,23 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
     }
 
 
+    public ItemStack craftingInputItem(int craftingSlot) {
+        return craftingSlot >= 0 && craftingSlot < 9
+                ? craftSlots.getItem(craftingSlot).copy()
+                : ItemStack.EMPTY;
+    }
     public int inputEssenceItemIndex() {
-        int index = EssenceItemCatalog.indexOf(getSlot(ANALYZE_SLOT).getItem());
-        return isEssenceItemAvailable(index) ? index : -1;
+        return EssenceItemCatalog.indexOf(getSlot(ANALYZE_SLOT).getItem());
     }
 
     public int carriedEssenceItemIndex() {
-        int index = EssenceItemCatalog.indexOf(getCarried());
-        return isEssenceItemAvailable(index) ? index : -1;
+        return EssenceItemCatalog.indexOf(getCarried());
+    }
+
+    public int essenceItemRequiredTableLevel(int index) {
+        return index >= 0 && index < EssenceItemCatalog.size()
+                ? EssenceItemCatalog.get(index).tableLevel()
+                : 0;
     }
 
     public boolean canAnalyzeEssenceItem() {
@@ -959,6 +1000,11 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
                 : PlayerEssenceKnowledge.autoSellEnabled(player);
     }
 
+    public boolean isAutoRefillEnabled() {
+        return player.level().isClientSide
+                ? syncedAutoRefillEnabled
+                : PlayerEssenceKnowledge.autoRefillEnabled(player);
+    }
     public boolean canRemoveEssenceUnlock(int index) {
         return isEssenceTab() && isEssenceItemUnlocked(index);
     }
@@ -990,6 +1036,9 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         return AUTO_SELL_BUTTON_ID;
     }
 
+    public static int autoRefillButtonId() {
+        return AUTO_REFILL_BUTTON_ID;
+    }
     public static int essenceItemPurchaseButtonId(int index, boolean bulk, boolean toCursor) {
         int clampedIndex = Mth.clamp(index, 0, Math.max(0, EssenceItemCatalog.size() - 1));
         int mode = (bulk ? 1 : 0) | (toCursor ? 2 : 0);
@@ -1326,6 +1375,17 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         return true;
     }
 
+    private boolean toggleAutoRefill(Player player) {
+        if (player.level().isClientSide) {
+            return true;
+        }
+        if (activeTab != MateriaTableTab.ESSENCE) {
+            return false;
+        }
+        syncedAutoRefillEnabled = PlayerEssenceKnowledge.toggleAutoRefill(player);
+        broadcastChanges();
+        return true;
+    }
     private boolean sellEssenceItem(Player player) {
         if (player.level().isClientSide) {
             return true;
@@ -1345,6 +1405,7 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         long earned = safeMultiply(definition.sellValue(), input.getCount());
         inputSlot.setByPlayer(ItemStack.EMPTY);
         PlayerEssence.add(player, earned);
+        PlayerEssenceSessionHistory.recordSold(player, index);
         displayedEssence = PlayerEssence.get(player);
         broadcastChanges();
         return true;
@@ -1403,10 +1464,94 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
             }
         }
 
+        PlayerEssenceSessionHistory.recordPurchased(player, index);
         selectEssenceItem(index);
         displayedEssence = PlayerEssence.get(player);
         broadcastChanges();
         return true;
+    }
+    public boolean directCraft(ServerPlayer requestingPlayer, ResourceLocation recipeId) {
+        if (player != requestingPlayer
+                || requestingPlayer.containerMenu != this
+                || table == null
+                || !stillValid(requestingPlayer)) {
+            return false;
+        }
+
+        Optional<RecipeHolder<?>> foundRecipe = level.getRecipeManager().byKey(recipeId);
+        if (foundRecipe.isEmpty() || !(foundRecipe.get().value() instanceof CraftingRecipe craftingRecipe)) {
+            return false;
+        }
+
+        RecipeHolder<CraftingRecipe> recipe = new RecipeHolder<>(foundRecipe.get().id(), craftingRecipe);
+        DirectCraftPlan plan = DirectCraftPlanner.evaluate(this, requestingPlayer, recipe);
+        if (!plan.isReady()) {
+            return false;
+        }
+        for (DirectCraftPlan.Purchase purchase : plan.purchases()) {
+            if (!craftSlots.getItem(purchase.craftingSlot()).isEmpty()) {
+                return false;
+            }
+        }
+        if (!PlayerEssence.trySpend(requestingPlayer, plan.totalCost())) {
+            return false;
+        }
+
+        for (DirectCraftPlan.Purchase purchase : plan.purchases()) {
+            craftSlots.setItem(purchase.craftingSlot(), purchase.stack());
+            PlayerEssenceSessionHistory.recordPurchased(requestingPlayer, purchase.catalogIndex());
+        }
+        displayedEssence = PlayerEssence.get(requestingPlayer);
+        broadcastChanges();
+        return true;
+    }
+    private void autoRefillAfterCraft(Player craftingPlayer, List<ItemStack> craftedPattern) {
+        if (craftingPlayer.level().isClientSide
+                || craftingPlayer != player
+                || craftingPlayer.containerMenu != this
+                || !PlayerEssenceKnowledge.autoRefillEnabled(craftingPlayer)) {
+            return;
+        }
+
+        AutoRefillPlan plan = AutoRefillPlanner.evaluate(this, craftingPlayer, craftedPattern);
+        if (!plan.isReady()) {
+            String reasonKey = plan.status() == AutoRefillPlan.Status.NOT_ENOUGH_ESSENCE
+                    ? "message.materia_reborn.auto_refill.not_enough_essence"
+                    : "message.materia_reborn.auto_refill.required_item_unavailable";
+            sendAutoRefillFailure(craftingPlayer, reasonKey);
+            return;
+        }
+        if (!PlayerEssence.trySpend(craftingPlayer, plan.totalCost())) {
+            sendAutoRefillFailure(
+                    craftingPlayer,
+                    "message.materia_reborn.auto_refill.not_enough_essence"
+            );
+            return;
+        }
+
+        for (AutoRefillPlan.Purchase purchase : plan.purchases()) {
+            ItemStack current = craftSlots.getItem(purchase.craftingSlot());
+            ItemStack refilled = purchase.stack();
+            if (!current.isEmpty()) {
+                refilled = current.copy();
+                refilled.grow(1);
+            }
+            craftSlots.setItem(purchase.craftingSlot(), refilled);
+            PlayerEssenceSessionHistory.recordPurchased(craftingPlayer, purchase.catalogIndex());
+        }
+        displayedEssence = PlayerEssence.get(craftingPlayer);
+        broadcastChanges();
+    }
+
+    private static void sendAutoRefillFailure(Player player, String reasonKey) {
+        player.displayClientMessage(
+                net.minecraft.network.chat.Component
+                        .translatable("message.materia_reborn.auto_refill.failed")
+                        .append(net.minecraft.network.chat.Component.literal("\n"))
+                        .append(net.minecraft.network.chat.Component.translatable(reasonKey))
+                        .withStyle(net.minecraft.ChatFormatting.RED),
+                false
+        );
     }
     private static long safeMultiply(long value, int count) {
         return count > 0 && value > Long.MAX_VALUE / count ? Long.MAX_VALUE : value * count;
@@ -1830,6 +1975,19 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         };
     }
 
+    private DataSlot createAutoRefillDataSlot() {
+        return new DataSlot() {
+            @Override
+            public int get() {
+                return PlayerEssenceKnowledge.autoRefillEnabled(player) ? 1 : 0;
+            }
+
+            @Override
+            public void set(int value) {
+                syncedAutoRefillEnabled = value != 0;
+            }
+        };
+    }
     private DataSlot createEssenceLowDataSlot() {
         return new DataSlot() {
             @Override
@@ -1873,6 +2031,33 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         };
     }
 
+    private DataSlot createRecentSoldEssenceItemDataSlot() {
+        return new DataSlot() {
+            @Override
+            public int get() {
+                return PlayerEssenceSessionHistory.lastSoldIndex(player);
+            }
+
+            @Override
+            public void set(int value) {
+                syncedRecentSoldEssenceItemIndex = value >= 0 && value < EssenceItemCatalog.size() ? value : -1;
+            }
+        };
+    }
+
+    private DataSlot createRecentPurchasedEssenceItemDataSlot() {
+        return new DataSlot() {
+            @Override
+            public int get() {
+                return PlayerEssenceSessionHistory.lastPurchasedIndex(player);
+            }
+
+            @Override
+            public void set(int value) {
+                syncedRecentPurchasedEssenceItemIndex = value >= 0 && value < EssenceItemCatalog.size() ? value : -1;
+            }
+        };
+    }
     private DataSlot createSelectedEssenceAnalysisDataSlot() {
         return new DataSlot() {
             @Override
@@ -2139,7 +2324,8 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
                 0,
                 223,
                 224,
-                this::isEssenceTab
+                this::isEssenceTab,
+                this::autoRefillAfterCraft
         ));
     }
 

@@ -1,5 +1,6 @@
 package com.materiareborn.event;
 
+import com.materiareborn.essence.EssenceCondensationRecipe;
 import com.materiareborn.registry.ModItems;
 import com.materiareborn.registry.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -28,7 +29,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class EssenceCondensationEvents {
-    private static final int CONDENSATION_TICKS = 60;
     private static final Map<ServerLevel, Map<BlockPos, Integer>> ACTIVE_CONDENSATIONS = new WeakHashMap<>();
 
     private EssenceCondensationEvents() {
@@ -59,7 +59,7 @@ public final class EssenceCondensationEvents {
             event.getItemStack().shrink(1);
         }
         serverLevel.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), Block.UPDATE_ALL);
-        pending.put(pos.immutable(), CONDENSATION_TICKS);
+        pending.put(pos.immutable(), EssenceCondensationRecipe.PROCESS_TICKS);
         playCondensationEffects(serverLevel, pos, 14);
     }
 
@@ -87,7 +87,11 @@ public final class EssenceCondensationEvents {
 
             if (remaining <= 0) {
                 serverLevel.setBlock(pos.below(), Blocks.AMETHYST_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
-                Block.popResource(serverLevel, pos.above(), new ItemStack(ModItems.ESSENCE.get(), 4));
+                Block.popResource(
+                        serverLevel,
+                        pos.above(),
+                        new ItemStack(ModItems.ESSENCE.get(), EssenceCondensationRecipe.OUTPUT_COUNT)
+                );
                 playCondensationEffects(serverLevel, pos, 28);
                 iterator.remove();
             } else {
@@ -112,14 +116,14 @@ public final class EssenceCondensationEvents {
 
     private static boolean hasIngredients(Level level, BlockPos pos) {
         List<ItemEntity> items = nearbyItems(level, pos);
-        return countItems(items, ModItems.ESSENCE_DUST.get()) >= 4
-                && countItems(items, ModItems.ESSENCE_CRYSTAL.get()) >= 1;
+        return countItems(items, ModItems.ESSENCE_DUST.get()) >= EssenceCondensationRecipe.DUST_COUNT
+                && countItems(items, ModItems.ESSENCE_CRYSTAL.get()) >= EssenceCondensationRecipe.CRYSTAL_COUNT;
     }
 
     private static void consumeIngredients(ServerLevel level, BlockPos pos) {
         List<ItemEntity> items = nearbyItems(level, pos);
-        consumeItems(items, ModItems.ESSENCE_DUST.get(), 4);
-        consumeItems(items, ModItems.ESSENCE_CRYSTAL.get(), 1);
+        consumeItems(items, ModItems.ESSENCE_DUST.get(), EssenceCondensationRecipe.DUST_COUNT);
+        consumeItems(items, ModItems.ESSENCE_CRYSTAL.get(), EssenceCondensationRecipe.CRYSTAL_COUNT);
     }
 
     private static List<ItemEntity> nearbyItems(Level level, BlockPos pos) {

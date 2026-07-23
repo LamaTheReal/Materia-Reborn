@@ -5,19 +5,26 @@ import com.materiareborn.client.particle.MagicGlyphParticle;
 import com.materiareborn.client.screen.MateriaTableScreen;
 import com.materiareborn.client.screen.config.MateriaConfigHomeScreen;
 import com.materiareborn.core.ModConstants;
-import com.materiareborn.registry.ModMenuTypes;
 import com.materiareborn.registry.ModFluids;
+import com.materiareborn.registry.ModItems;
+import com.materiareborn.registry.ModMenuTypes;
 import com.materiareborn.registry.ModParticles;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @EventBusSubscriber(modid = ModConstants.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class MateriaClient {
@@ -26,6 +33,7 @@ public final class MateriaClient {
 
     private MateriaClient() {
     }
+
     public static void registerConfigScreen(ModContainer modContainer) {
         modContainer.registerExtensionPoint(
                 IConfigScreenFactory.class,
@@ -46,6 +54,21 @@ public final class MateriaClient {
 
     @SubscribeEvent
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerItem(new IClientItemExtensions() {
+            @Override
+            public boolean applyForgeHandTransform(
+                    PoseStack poseStack,
+                    LocalPlayer player,
+                    HumanoidArm arm,
+                    ItemStack itemInHand,
+                    float partialTick,
+                    float equipProcess,
+                    float swingProcess
+            ) {
+                return EssenceRefiningHandAnimation.applyHandTransform(poseStack, player, arm, partialTick);
+            }
+        }, Items.FLINT, ModItems.ESSENCE_CRYSTAL.get());
+
         event.registerFluidType(new IClientFluidTypeExtensions() {
             @Override
             public ResourceLocation getStillTexture() {
