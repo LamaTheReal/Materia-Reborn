@@ -12,7 +12,6 @@ It is inspired by the freedom and item-transmutation ideas of ProjectE, but it i
 
 **You can also join our Discord :3 :** [click here](https://discord.gg/4YmYJc8JTb)
 
-**Whaaat? TikTok?:** [(click here)](https://www.tiktok.com/@materia.reborn)
 
 
 ![Materia Reborn showcase](assets/screenshots/overview.jpg)
