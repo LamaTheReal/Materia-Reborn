@@ -3,6 +3,7 @@ package com.materiareborn.block;
 import com.materiareborn.blockentity.MateriaTableBlockEntity;
 import com.materiareborn.registry.ModBlockEntityTypes;
 import com.mojang.serialization.MapCodec;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,6 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -114,6 +116,26 @@ public final class MateriaTableBlock extends BaseEntityBlock {
         }
         super.playerDestroy(level, player, pos, state, blockEntity, tool);
     }
+
+    @Override
+    protected void onExplosionHit(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Explosion explosion,
+            BiConsumer<ItemStack, BlockPos> dropConsumer
+    ) {
+        if (explosion.getBlockInteraction() != Explosion.BlockInteraction.TRIGGER_BLOCK
+                && level.getBlockEntity(pos) instanceof MateriaTableBlockEntity table
+                && table.prepareKeepInventoryExplosionDrop()) {
+            dropConsumer.accept(table.createPreservedBlockItem(this), pos);
+            state.onBlockExploded(level, pos, explosion);
+            table.clearBreakPreservation();
+            return;
+        }
+        super.onExplosionHit(state, level, pos, explosion, dropConsumer);
+    }
+
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof MateriaTableBlockEntity table) {

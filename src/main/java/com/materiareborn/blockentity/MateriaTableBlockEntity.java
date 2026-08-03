@@ -46,6 +46,7 @@ public final class MateriaTableBlockEntity extends AbstractFurnaceBlockEntity {
     private static final String SMELT_ESSENCE_OWNER_TAG = "SmeltEssenceOwner";
     private static final String FURNACE_OWNER_TAG = "FurnaceOwner";
     private static final String BACKPACK_OWNER_TAG = "BackpackOwner";
+    private static final String KEEP_INVENTORY_ACTIVE_TAG = "KeepInventoryActive";
     private static final String OWNED_PROGRESS_MIGRATION_COMPLETE_TAG = "OwnedProgressMigrationComplete";
     private static final String UNLOCKED_STORAGE_SLOTS_TAG = "UnlockedStorageSlots";
     private static final String UNLOCKED_FURNACE_SLOTS_TAG = "UnlockedFurnaceSlots";
@@ -94,6 +95,7 @@ public final class MateriaTableBlockEntity extends AbstractFurnaceBlockEntity {
     private double storedExperience;
     private BatchPlan activeBatchPlan;
     private boolean preserveBackpackOnBreak;
+    private boolean keepInventoryActive;
     private int upgradeRitualTargetTier;
     private int upgradeRitualStep;
     private int upgradeRitualTicks;
@@ -199,6 +201,7 @@ public final class MateriaTableBlockEntity extends AbstractFurnaceBlockEntity {
         );
         furnaceOwner = player.getUUID();
         backpackOwner = player.getUUID();
+        keepInventoryActive = isKeepInventoryEnabled(player);
         activeSpeedLevel = effectiveFurnaceSetting(player, FurnaceExtraUpgrade.SPEED);
         activeBatchLevel = effectiveFurnaceSetting(player, FurnaceExtraUpgrade.BATCH_SMELTING);
         xpStorageUpgrade = effectiveFurnaceLevel(player, FurnaceExtraUpgrade.XP_STORAGE) > 0;
@@ -254,7 +257,25 @@ public final class MateriaTableBlockEntity extends AbstractFurnaceBlockEntity {
     }
 
     public void prepareKeepInventoryDrop(Player player) {
-        preserveBackpackOnBreak = !player.isCreative()
+        keepInventoryActive = isKeepInventoryEnabled(player);
+        preserveBackpackOnBreak = !player.isCreative() && keepInventoryActive;
+    }
+
+    public boolean prepareKeepInventoryExplosionDrop() {
+        if (level instanceof ServerLevel serverLevel && backpackOwner != null) {
+            ServerPlayer owner = serverLevel.getServer().getPlayerList().getPlayer(backpackOwner);
+            if (owner != null) {
+                keepInventoryActive = isKeepInventoryEnabled(owner);
+            }
+        }
+        preserveBackpackOnBreak = MateriaConfig.backpackUpgradeEnabled(
+                BackpackExtraUpgrade.KEEP_INVENTORY.id()
+        ) && keepInventoryActive;
+        return preserveBackpackOnBreak;
+    }
+
+    private boolean isKeepInventoryEnabled(Player player) {
+        return MateriaConfig.backpackUpgradeEnabled(BackpackExtraUpgrade.KEEP_INVENTORY.id())
                 && effectiveBackpackSetting(player, BackpackExtraUpgrade.KEEP_INVENTORY) > 0;
     }
 
@@ -404,6 +425,7 @@ public final class MateriaTableBlockEntity extends AbstractFurnaceBlockEntity {
         smeltEssenceOwner = tag.hasUUID(SMELT_ESSENCE_OWNER_TAG) ? tag.getUUID(SMELT_ESSENCE_OWNER_TAG) : null;
         furnaceOwner = tag.hasUUID(FURNACE_OWNER_TAG) ? tag.getUUID(FURNACE_OWNER_TAG) : null;
         backpackOwner = tag.hasUUID(BACKPACK_OWNER_TAG) ? tag.getUUID(BACKPACK_OWNER_TAG) : null;
+        keepInventoryActive = tag.getBoolean(KEEP_INVENTORY_ACTIVE_TAG);
         ownedProgressMigrationComplete = tag.getBoolean(OWNED_PROGRESS_MIGRATION_COMPLETE_TAG);
         if (smeltEssenceOwner == null) {
             smeltEssenceEnabled = false;
@@ -475,6 +497,7 @@ public final class MateriaTableBlockEntity extends AbstractFurnaceBlockEntity {
         if (backpackOwner != null) {
             tag.putUUID(BACKPACK_OWNER_TAG, backpackOwner);
         }
+        tag.putBoolean(KEEP_INVENTORY_ACTIVE_TAG, keepInventoryActive);
         tag.putBoolean(OWNED_PROGRESS_MIGRATION_COMPLETE_TAG, ownedProgressMigrationComplete);
         tag.putInt(UNLOCKED_STORAGE_SLOTS_TAG, unlockedStorageSlots);
         tag.putInt(UNLOCKED_FURNACE_SLOTS_TAG, unlockedFurnaceSlotsPerSide);

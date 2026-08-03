@@ -1,6 +1,5 @@
 package com.materiareborn.client;
 
-import com.materiareborn.client.particle.LiquidEssenceSurfaceParticle;
 import com.materiareborn.client.particle.MagicGlyphParticle;
 import com.materiareborn.client.screen.MateriaTableScreen;
 import com.materiareborn.client.screen.config.MateriaConfigHomeScreen;
@@ -44,7 +43,6 @@ public final class MateriaClient {
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticles.MAGIC_GLYPH.get(), MagicGlyphParticle.Provider::new);
-        event.registerSpriteSet(ModParticles.LIQUID_ESSENCE_GLYPH.get(), LiquidEssenceSurfaceParticle.Provider::new);
     }
 
     @SubscribeEvent

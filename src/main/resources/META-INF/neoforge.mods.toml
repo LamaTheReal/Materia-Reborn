@@ -1,36 +1,41 @@
 modLoader="javafml"
-loaderVersion="${loader_version_range}"
-license="${mod_license}"
+loaderVersion="[4,)"
+license="MIT"
 
 [[mods]]
-modId="${mod_id}"
-version="${mod_version}"
-displayName="${mod_name}"
-authors="${mod_authors}"
-description='''${mod_description}'''
+modId="materia_reborn"
+version="0.3B"
+displayName="Materia Reborn"
+authors="LamaTheReal"
+displayURL="https://github.com/LamaTheReal/Materia-Reborn"
+logoFile="icon.png"
+logoBlur=true
+description='''Collect Essence, analyze and unlock items, expand your Backpack and Furnace, and upgrade the Materia Table through powerful rituals.
 
-[[dependencies.${mod_id}]]
+Discord: https://discord.gg/4YmYJc8JTb'''
+
+[[dependencies.materia_reborn]]
 modId="neoforge"
 type="required"
-versionRange="${neo_version_range}"
+versionRange="[21.1.235,)"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.materia_reborn]]
 modId="minecraft"
 type="required"
-versionRange="${minecraft_version_range}"
+versionRange="[1.21.1]"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.materia_reborn]]
 modId="jei"
 type="optional"
 versionRange="[19,)"
 ordering="AFTER"
 side="CLIENT"
 
-[[dependencies.${mod_id}]]
+[[dependencies.materia_reborn]]
 modId="jeresources"
 type="optional"
 versionRange="[1.6,)"

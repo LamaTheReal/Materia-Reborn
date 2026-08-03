@@ -65,7 +65,13 @@ public final class MateriaTableRitualService {
         coreStack.shrink(1);
         table.startUpgradeRitual(upgrade.targetTier(), player.getUUID());
         PlayerEssence.syncOpenMenu(player);
-        playSound((ServerLevel) player.level(), tablePos, upgrade.activationSound(), 1.0F, 1.0F);
+        playSound(
+                (ServerLevel) player.level(),
+                tablePos,
+                upgrade.activationSound(),
+                1.0F,
+                1.0F
+        );
         ((ServerLevel) player.level()).sendParticles(
                 ModParticles.MAGIC_GLYPH.get(),
                 tablePos.getX() + 0.5D,
@@ -128,7 +134,7 @@ public final class MateriaTableRitualService {
         double essenceSurfaceY = liquidSurfaceY(level, essencePos);
         level.setBlock(essencePos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         level.sendParticles(
-                ModParticles.LIQUID_ESSENCE_GLYPH.get(),
+                ModParticles.MAGIC_GLYPH.get(),
                 essencePos.getX() + 0.5D,
                 essenceSurfaceY + LIQUID_SURFACE_PARTICLE_OFFSET,
                 essencePos.getZ() + 0.5D,
@@ -287,7 +293,7 @@ public final class MateriaTableRitualService {
         double x = sourcePos.getX() + 0.5D + Math.cos(angle) * LIQUID_SURFACE_PARTICLE_RADIUS;
         double z = sourcePos.getZ() + 0.5D + Math.sin(angle) * LIQUID_SURFACE_PARTICLE_RADIUS;
         level.sendParticles(
-                ModParticles.LIQUID_ESSENCE_GLYPH.get(),
+                ModParticles.MAGIC_GLYPH.get(),
                 x,
                 liquidSurfaceY(level, sourcePos) + LIQUID_SURFACE_PARTICLE_OFFSET,
                 z,

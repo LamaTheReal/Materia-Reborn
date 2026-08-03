@@ -26,7 +26,7 @@ public final class MateriaJerIntegration {
                 new ItemStack(ModBlocks.DEEPSLATE_ESSENCE.get()),
                 new DistributionSquare(0, 0, 0.70F),
                 Restriction.OVERWORLD,
-                new LootDrop(new ItemStack(ModItems.ESSENCE_CRYSTAL.get()), 1, 1)
+                new LootDrop(new ItemStack(ModItems.ESSENCE_CRYSTAL.get()), 1, 2)
         );
         registered = true;
     }

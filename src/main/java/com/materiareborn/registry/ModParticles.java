@@ -16,10 +16,6 @@ public final class ModParticles {
             () -> new SimpleParticleType(false)
     );
 
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LIQUID_ESSENCE_GLYPH = PARTICLE_TYPES.register(
-            "liquid_essence_glyph",
-            () -> new SimpleParticleType(false)
-    );
 
     private ModParticles() {
     }

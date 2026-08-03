@@ -131,6 +131,7 @@
     "jei.materia_reborn.budding_amethyst.tooltip":  "Place directly below the cauldron",
     "jei.materia_reborn.glass_bottle.tooltip":  "Use this to start the condensation",
     "subtitles.materia_reborn.essence_condensation":  "Essence condenses",
+
     "screen.materia_reborn.materia_table.max_level":  "MAX LEVEL",
     "screen.materia_reborn.materia_table.ritual_preview":  "Ritual Preview",
     "screen.materia_reborn.materia_table.ritual_target":  "Table Level %s -\u003e %s",
@@ -177,6 +178,8 @@
     "materia_reborn.configuration.smelt_essence":  "Smelt Essence",
     "materia_reborn.configuration.maximum":  "Maximum Essence",
     "materia_reborn.configuration.maximum.tooltip":  "Highest Essence balance one player can store. The large default intentionally acts as practically unlimited.",
+    "materia_reborn.configuration.automatic_recipe_calculation":  "Automatic Recipe Calculation",
+    "materia_reborn.configuration.automatic_recipe_calculation.tooltip":  "Automatically derives Essence values from loaded Vanilla and mod recipes. Disabled by default.",
     "materia_reborn.configuration.initial":  "Starting Backpack Slots",
     "materia_reborn.configuration.initial.tooltip":  "Backpack slots available before buying any slot upgrades.",
     "materia_reborn.configuration.table_level_2_maximum":  "Table 2 Backpack Slots",

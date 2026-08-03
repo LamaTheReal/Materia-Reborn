@@ -1684,6 +1684,9 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
                 upgrade,
                 Math.min(level, backpackExtraMaxLevel(upgrade))
         );
+        if (table != null && upgrade == BackpackExtraUpgrade.KEEP_INVENTORY) {
+            table.applyPlayerProgress(player);
+        }
         syncedBackpackExtraSettings[upgrade.ordinal()] = PlayerMateriaProgress.backpackExtraSetting(player, upgrade);
         broadcastChanges();
         return true;
@@ -1720,6 +1723,9 @@ public final class MateriaTableMenu extends AbstractContainerMenu {
         }
         syncedBackpackExtraLevels[upgrade.ordinal()] = PlayerMateriaProgress.backpackExtraLevel(player, upgrade);
         syncedBackpackExtraSettings[upgrade.ordinal()] = PlayerMateriaProgress.backpackExtraSetting(player, upgrade);
+        if (table != null && upgrade == BackpackExtraUpgrade.KEEP_INVENTORY) {
+            table.applyPlayerProgress(player);
+        }
         displayedEssence = PlayerEssence.get(player);
         broadcastChanges();
         return true;

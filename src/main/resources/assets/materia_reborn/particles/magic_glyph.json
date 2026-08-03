@@ -1,6 +1,16 @@
 {
-  "textures": [
-    "materia_reborn:magic_glyph_0",
-    "materia_reborn:magic_glyph_1"
-  ]
+    "textures":  [
+                     "materia_reborn:essence_glyph_01",
+                     "materia_reborn:essence_glyph_02",
+                     "materia_reborn:essence_glyph_03",
+                     "materia_reborn:essence_glyph_04",
+                     "materia_reborn:essence_glyph_05",
+                     "materia_reborn:essence_glyph_06",
+                     "materia_reborn:essence_glyph_07",
+                     "materia_reborn:essence_glyph_08",
+                     "materia_reborn:essence_glyph_09",
+                     "materia_reborn:essence_glyph_10",
+                     "materia_reborn:essence_glyph_11",
+                     "materia_reborn:essence_glyph_12"
+                 ]
 }
